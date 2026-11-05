@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURELIA — Prescription Eyewear Atelier &amp; Intelligent Frame Selector</title>
+  <meta name="description" content="Curated prescription eyewear atelier and intelligent frame selector. Match frames to your face shape, calibrate lens index to your prescription, and build your order.">
+  <meta name="theme-color" content="#FAF6F1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#results">Skip to catalogue</a>
+
+  <!-- Site Navigation (Verdant Style) -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-container">
+      <a href="#" class="nav-brand" aria-label="AURELIA Home">
+        <span class="nav-brand-leaf" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6.5" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="12" r="4.5"/>
+            <path d="M11 11.5c.8-1 2.2-1 3 0"/>
+            <path d="M2 11.5h.5M21.5 11.5H22"/>
+          </svg>
+        </span>
+        AURELIA
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#top" class="nav-link active">Home</a>
+        <a href="#catalogue" class="nav-link">Shop Frames</a>
+        <a href="#finder-quiz" class="nav-link">Frame Finder</a>
+        <a href="#optical-vault" class="nav-link">Prescription Vault</a>
+        <a href="#care-guides" class="nav-link">Lens Guides</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Quick Search Trigger -->
+        <button type="button" class="nav-action-btn" data-action="open-search" aria-label="Search eyewear catalogue" title="Search frames (press /)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+
+        <!-- Prescription Button -->
+        <button type="button" class="nav-rx-pill" data-action="open-rx" title="Manage Prescription (Rx)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7h10M4 12h7m-3 0 8 8m0-5-5 5"/>
+          </svg>
+          <span>My Rx</span>
+          <span class="rx-status-dot" id="rx-dot" hidden></span>
+        </button>
+
+        <!-- Compare Icon with Dynamic Badge -->
+        <button type="button" class="nav-action-btn" data-action="open-compare" aria-label="Compare frames" title="Compare Frames">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3l4 4-4 4M20 7H4m4 14-4-4 4-4m-4 4h16"/>
+          </svg>
+          <span class="nav-badge-counter" id="cnt-compare">0</span>
+        </button>
+
+        <!-- Wishlist Icon with Dynamic Badge -->
+        <button type="button" class="nav-action-btn" data-action="open-favs" aria-label="Wishlist" title="View Saved Frames">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="nav-badge-counter" id="cnt-favs">0</span>
+        </button>
+
+        <!-- Cart Icon with Dynamic Badge -->
+        <button type="button" class="nav-action-btn" data-action="open-order" aria-label="Shopping Bag" title="View Optical Bag">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="nav-badge-counter" id="cnt-order">0</span>
+        </button>
+
+        <!-- Mobile Hamburger Button -->
+        <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <aside class="mobile-nav-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <a href="#top" class="mobile-nav-link">Home <span>&rarr;</span></a>
+    <a href="#catalogue" class="mobile-nav-link">Shop Eyewear Catalogue <span>&rarr;</span></a>
+    <a href="#finder-quiz" class="mobile-nav-link">Frame Finder 100-Pt Quiz <span>&rarr;</span></a>
+    <a href="#optical-vault" class="mobile-nav-link">Prescription &amp; Face Profile <span>&rarr;</span></a>
+    <a href="#care-guides" class="mobile-nav-link">Lens &amp; Care Guides <span>&rarr;</span></a>
+    <button type="button" class="mobile-nav-link" data-action="open-rx">Enter Prescription (Rx) <span>&rarr;</span></button>
+    <button type="button" class="mobile-nav-link" data-action="open-favs">Saved Wishlist <span>&rarr;</span></button>
+    <button type="button" class="mobile-nav-link" data-action="open-compare">Compare Frames <span>&rarr;</span></button>
+    <button type="button" class="mobile-nav-link" data-action="open-order">Optical Shopping Bag <span>&rarr;</span></button>
+  </aside>
+
+  <!-- Global Quick Search Modal -->
+  <div id="search-modal" class="search-modal-backdrop" role="dialog" aria-modal="true" aria-label="Search Frames">
+    <div class="search-modal-card">
+      <div class="search-modal-header">
+        <span class="search-modal-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input type="text" id="quick-search-input" class="search-modal-input" placeholder="Search by frame name, atelier, shape, or material..." aria-label="Search frames">
+        <button type="button" class="search-modal-close" data-action="close-search" aria-label="Close search">&times;</button>
+      </div>
+      <div class="search-results-list" id="quick-search-results"></div>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- A. HERO SECTION (Verdant Editorial Split Layout) -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <span class="section-tag">See Clearly. Live Beautifully.</span>
+          <h1 class="hero-title">
+            Handcrafted Frames, Calibrated to Your Prescription.
+          </h1>
+          <p class="hero-desc">
+            Discover architectural acetate and featherweight titanium eyewear tailored to your facial contours. Enter your optometrist's prescription for instant refractive lens index guidance and virtual fitting.
+          </p>
+          <div class="hero-btn-row">
+            <a href="#catalogue" class="btn btn-primary btn-lg">Explore Frames &rarr;</a>
+            <a href="#finder-quiz" class="btn btn-outline btn-lg">Find Your Perfect Frame</a>
+          </div>
+          <div class="hero-trust-bar">
+            <div>
+              <div class="trust-val">100% Optical Grade</div>
+              <div class="trust-sub">Hand-polished acetate &amp; titanium</div>
+            </div>
+            <div class="trust-divider"></div>
+            <div>
+              <div class="trust-val">Smart Rx Engine</div>
+              <div class="trust-sub">1.50 to 1.74 index calibration</div>
+            </div>
+            <div class="trust-divider"></div>
+            <div>
+              <div class="trust-val">30-Day Fit Promise</div>
+              <div class="trust-sub">Virtual try-on &amp; CAD schematics</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media-wrap">
+          <div class="hero-image-card">
+            <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=900&q=80" alt="Handcrafted prescription eyeglasses on warm linen backdrop">
+          </div>
+          <div class="hero-floating-badge">
+            <div class="hero-badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <div class="hero-badge-title">Optometrist Curated Fit</div>
+              <div class="hero-badge-sub">Precision PD, bridge &amp; diopter matched</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- B. FEATURED CATEGORIES SECTION -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Atelier Collections</span>
+          <h2 class="section-title">Explore by Frame Silhouette</h2>
+          <p class="section-subtitle">Browse curated optical silhouettes engineered to complement distinct facial proportions, bridge heights, and prescription powers.</p>
+        </div>
+
+        <div class="category-grid">
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="round">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//j/i/transparent-full-rim-round-john-jacobs-rich-acetate-jj-e11515-c11-eyeglasses_dsc5970_16_10_2024.jpg" alt="Round and Pantos Frames">
+            </div>
+            <h3>Round &amp; Pantos</h3>
+            <span>Softens angular jawlines</span>
+          </a>
+
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="square">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//v/i/black-full-rim-square-vincent-chase-acetate-vc-e18176-eyeglasses__dsc2243_11_08_2025.jpg" alt="Sculpted Square Frames">
+            </div>
+            <h3>Sculpted Square</h3>
+            <span>Adds crisp definition</span>
+          </a>
+
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="cat-eye">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//j/i/john-jacobs-jj-e70564-c1-eyeglasses_255850dsc_6899_18_07_2026.jpg" alt="Upswept Cat-Eye Frames">
+            </div>
+            <h3>Upswept Cat-Eye</h3>
+            <span>Lifts cheekbones naturally</span>
+          </a>
+
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="aviator">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//j/o/john-jacobs-full-rim-jj-e12548-c1-eyeglasses_G_1144.jpg" alt="Classic Pilot Aviator Frames">
+            </div>
+            <h3>Classic Aviator</h3>
+            <span>Double-bridge heritage</span>
+          </a>
+
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="rectangle">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//j/i/transparent-white-grey-full-rim-rectangle-john-jacobs-tr-flex-jj-e16847-c2-eyeglasses__dsc5189_23_04_2024.jpg" alt="Architectural Rectangle Frames">
+            </div>
+            <h3>Architectural</h3>
+            <span>Tailored everyday profile</span>
+          </a>
+
+          <a href="#catalogue" class="category-card" data-action="quick-shape" data-val="browline">
+            <div class="category-img-wrap">
+              <img src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//v/i/navy-blue-half-rim-rectangle-vincent-chase-halfrim-vce000122-eyeglasses__dsc5896_28_11_2024.jpg" alt="Browline and Mixed Material Frames">
+            </div>
+            <h3>Club Browline</h3>
+            <span>Acetate brow &amp; metal rim</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- C. PERSONAL FIT & PRESCRIPTION VAULT SECTION -->
+    <section class="section section-white" id="optical-vault">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Personal Fit Calibration</span>
+          <h2 class="section-title">Your Face Shape &amp; Prescription Profile</h2>
+          <p class="section-subtitle">Select your face shape and save your prescription below. Every frame in the catalogue will dynamically display compatibility badges and lens thickness recommendations.</p>
+        </div>
+
+        <div class="vault-grid">
+          <div class="vault-card">
+            <div class="vault-card-head">
+              <span class="vault-step-badge">Step 1</span>
+              <h3>Select Your Face Shape</h3>
+            </div>
+            <div class="faces" id="faces" role="radiogroup" aria-label="Face shape"></div>
+            <p class="face-info" id="face-info" aria-live="polite">Not sure? Pick the closest match — you can change or clear it any time.</p>
+          </div>
+
+          <div class="vault-card">
+            <div class="vault-card-head">
+              <span class="vault-step-badge">Step 2</span>
+              <h3>Optical Prescription (Rx)</h3>
+            </div>
+            <div class="rx-strip" id="rx-strip"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- D. THE LIVING CATALOGUE (Verdant Shop Sidebar + Grid Layout) -->
+    <section class="section" id="catalogue">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">The Optical Catalogue</span>
+          <h2 class="section-title" id="results-title">Handcrafted Eyewear Collection</h2>
+          <p class="section-subtitle">Every frame is crafted from Italian cellulose acetate or Japanese titanium, complete with custom prescription lens calibration.</p>
+        </div>
+
+        <button type="button" id="filters-toggle" class="btn btn-outline mobile-filter-trigger" aria-expanded="false" aria-controls="filters">
+          Filter &amp; Sort Frames
+        </button>
+
+        <div class="shop-layout">
+          <!-- LEFT FILTER SIDEBAR -->
+          <aside class="filter-sidebar" id="filters" aria-label="Product Filters">
+            <div class="filter-header">
+              <h3 class="filter-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filter Atelier
+              </h3>
+              <button type="button" class="btn-clear-filters" data-action="reset-filters">Reset All</button>
+            </div>
+
+            <fieldset class="filter-group">
+              <legend class="filter-group-title">Brand Collection</legend>
+              <div id="f-brands" class="checks"></div>
+            </fieldset>
+
+            <fieldset class="filter-group">
+              <legend class="filter-group-title">Frame Shape</legend>
+              <div id="f-shapes" class="checks"></div>
+            </fieldset>
+
+            <fieldset class="filter-group">
+              <legend class="filter-group-title">Material</legend>
+              <div id="f-materials" class="checks"></div>
+            </fieldset>
+
+            <fieldset class="filter-group">
+              <legend class="filter-group-title">Frame Size (Total Width)</legend>
+              <div id="f-sizes" class="checks"></div>
+            </fieldset>
+
+            <fieldset class="filter-group">
+              <legend class="filter-group-title">Frame Finish</legend>
+              <div id="f-colors" class="color-checks"></div>
+            </fieldset>
+
+            <div class="filter-group">
+              <div class="filter-group-title">
+                <span>Max Price</span>
+                <output id="f-price-out" class="price-out-badge">&#8377;5,000</output>
+              </div>
+              <input id="f-price" type="range" class="price-range-slider" min="1500" max="5000" step="250" value="5000" data-filter="maxPrice" aria-label="Maximum frame price">
+              <div class="price-values-display">
+                <span>&#8377;1,500</span>
+                <span>&#8377;5,000</span>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <div class="filter-group-title">Smart Fit Filters</div>
+              <div class="toggles">
+                <label class="toggle"><input type="checkbox" data-filter="recOnly"> <span>Only suits my face shape</span></label>
+                <label class="toggle"><input type="checkbox" data-filter="rxOnly"> <span>Only ideal for my Rx power</span></label>
+              </div>
+            </div>
+          </aside>
+
+          <!-- RIGHT SHOP MAIN AREA -->
+          <div id="results" tabindex="-1">
+            <div class="shop-toolbar">
+              <div class="shop-search-bar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input id="f-q" type="search" placeholder="Search by frame name, brand, shape, or material…" data-filter="q" aria-label="Search frames">
+              </div>
+
+              <div class="shop-toolbar-right">
+                <span id="results-count" class="results-count-text" aria-live="polite"></span>
+                <div class="sort-select-wrap">
+                  <label for="f-sort">Sort by:</label>
+                  <select id="f-sort" class="sort-select" data-filter="sort">
+                    <option value="match">Best Match</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name">Alphabetical (A–Z)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="active-filters" class="active-filters-bar"></div>
+
+            <div class="product-grid" id="grid"></div>
+
+            <div class="empty-results-state" id="empty" hidden>
+              <div class="empty-results-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6.5" cy="12" r="4.5"/><circle cx="17.5" cy="12" r="4.5"/><path d="M11 11.5c.8-1 2.2-1 3 0"/></svg>
+              </div>
+              <h3 class="empty-results-title">No Matching Frames Found</h3>
+              <p class="empty-results-desc">No eyewear models match all of your active filter selections. Try broadening your price or shape criteria.</p>
+              <button type="button" class="btn btn-primary" data-action="reset-filters">Reset All Filters</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- E. INTERACTIVE 4-STEP FRAME FINDER QUIZ (Verdant Plant-Finder Style) -->
+    <section class="section section-white" id="finder-quiz">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">Rule-Based Optical Recommender</span>
+          <h2 class="section-title">Frame Finder Questionnaire</h2>
+          <p class="section-subtitle">Answer 4 quick questions about your face shape, prescription strength, and daily routine. Our 100-point optical scoring algorithm ranks our collection by compatibility.</p>
+        </div>
+
+        <div class="finder-wrapper">
+          <div class="finder-card" id="quiz-card">
+            <div class="finder-progress-bar-wrap">
+              <div class="finder-progress-header">
+                <span id="quiz-step-label">Step 1 of 4</span>
+                <span>100-Point Compatibility Algorithm</span>
+              </div>
+              <div class="finder-progress-track">
+                <div id="quiz-progress-fill" class="finder-progress-fill" style="width: 25%;"></div>
+              </div>
+            </div>
+
+            <div id="quiz-body"></div>
+
+            <div class="wizard-nav-bar">
+              <button type="button" class="btn btn-outline" id="quiz-prev" data-action="quiz-prev" disabled>&larr; Previous</button>
+              <button type="button" class="btn btn-primary" id="quiz-next" data-action="quiz-next">Next Step &rarr;</button>
+            </div>
+          </div>
+
+          <div id="quiz-results" class="finder-results-section" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- F. WHY CHOOSE AURELIA -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="section-tag">The AURELIA Standard</span>
+          <h2 class="section-title">Optical Craftsmanship, Effortless Clarity</h2>
+          <p class="section-subtitle">We pair heritage frame-making materials with precision digital lens surfacing so even strong prescriptions feel featherlight.</p>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Aspheric High-Index Lenses</h3>
+            <p>From standard 1.50 CR-39 up to ultra-thin 1.74 high-index lenses, reducing lens edge thickness and weight by up to 45%.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            </div>
+            <h3>Mazzucchelli Bio-Acetate</h3>
+            <p>Plant-derived Italian cellulose acetate and hypoallergenic Japanese beta-titanium engineered for all-day bridge comfort.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <h3>Multi-Layer AR &amp; UV400</h3>
+            <p>Every prescription pair includes scratch-resistant hard coating, 100% UV400 protection, and optional blue-light or photochromic filters.</p>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7.002 7.002 0 0 1 5.07 11H5a1 1 0 0 1 0-2h.07A7.002 7.002 0 0 1 11 3.07V3a1 1 0 0 1 2 0v.07A7.002 7.002 0 0 1 18.93 9H19a1 1 0 0 1 0 2h-.07A7.002 7.002 0 0 1 13 16.93z"/></svg>
+            </div>
+            <h3>Precision PD &amp; Optical Center</h3>
+            <p>Lenses are digitally centered to your exact Pupillary Distance (PD) to eliminate prismatic distortion and eye strain.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- G. OPTICAL CARE & LENS GUIDES -->
+    <section class="section section-white" id="care-guides">
+      <div class="container">
+        <div class="section-head-split">
+          <div>
+            <span class="section-tag">Optical Knowledge Hub</span>
+            <h2 class="section-title" style="margin-bottom: 0;">Practical Prescription &amp; Fit Guides</h2>
+          </div>
+          <button type="button" class="btn btn-outline" data-action="open-rx">Calibrate My Prescription &rarr;</button>
+        </div>
+
+        <div class="guides-grid">
+          <article class="care-article-card">
+            <span class="badge badge-secondary" style="margin-bottom: 12px;">Lens Index Guide</span>
+            <h3 class="care-article-title">Choosing Between 1.50, 1.60, 1.67 &amp; 1.74 High-Index Lenses</h3>
+            <p class="care-article-summary">Understand how refractive index bends light more efficiently to keep strong minus or plus prescriptions remarkably thin and lightweight.</p>
+            <button type="button" class="btn btn-outline btn-sm" data-action="open-guide" data-val="index">Read Full Guide &rarr;</button>
+          </article>
+
+          <article class="care-article-card">
+            <span class="badge badge-secondary" style="margin-bottom: 12px;">Fit &amp; Measurements</span>
+            <h3 class="care-article-title">Decoding Frame Numbers: Lens Width, Bridge &amp; Temple Length</h3>
+            <p class="care-article-summary">Learn how to read the three millimeter numbers stamped inside your current glasses (e.g., 52 □ 18 — 145) and measure your PD at home.</p>
+            <button type="button" class="btn btn-outline btn-sm" data-action="open-guide" data-val="sizing">Read Full Guide &rarr;</button>
+          </article>
+
+          <article class="care-article-card">
+            <span class="badge badge-secondary" style="margin-bottom: 12px;">Face Proportions</span>
+            <h3 class="care-article-title">The Rule of Contrast: Balancing Facial Contours with Frame Geometry</h3>
+            <p class="care-article-summary">Why angular frames flatter soft features, how keyhole bridges fit different nose bridges, and why smaller apertures suit strong prescriptions.</p>
+            <button type="button" class="btn btn-outline btn-sm" data-action="open-guide" data-val="faces">Read Full Guide &rarr;</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer (Verdant 4-Column Style) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">
+            <span>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="6.5" cy="12" r="4.5"/><circle cx="17.5" cy="12" r="4.5"/><path d="M11 11.5c.8-1 2.2-1 3 0"/></svg>
+            </span>
+            AURELIA
+          </div>
+          <div class="footer-tagline">"See Clearly. Live Beautifully."</div>
+          <p class="footer-desc">
+            An independent prescription eyewear atelier combining handcrafted cellulose acetate &amp; titanium frames with intelligent optical calibration.
+          </p>
+          <div class="footer-organic-badge">
+            <h4>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              100% Client-Side Privacy
+            </h4>
+            <p>Your prescription values, saved frames, and fitting profile are stored strictly inside your browser.</p>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Frame Collections</h3>
+          <ul class="footer-links">
+            <li><a href="#catalogue" class="footer-link" data-action="quick-shape" data-val="round">Round &amp; Pantos Frames</a></li>
+            <li><a href="#catalogue" class="footer-link" data-action="quick-shape" data-val="square">Sculpted Square Frames</a></li>
+            <li><a href="#catalogue" class="footer-link" data-action="quick-shape" data-val="cat-eye">Upswept Cat-Eye Frames</a></li>
+            <li><a href="#catalogue" class="footer-link" data-action="quick-shape" data-val="aviator">Classic Pilot Aviators</a></li>
+            <li><a href="#catalogue" class="footer-link" data-action="quick-shape" data-val="rectangle">Architectural Rectangles</a></li>
+            <li><a href="#catalogue" class="footer-link" data-action="reset-filters">View Full Catalogue</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Optical Tools</h3>
+          <ul class="footer-links">
+            <li><a href="#finder-quiz" class="footer-link">Frame Finder 100-Pt Quiz</a></li>
+            <li><a href="#optical-vault" class="footer-link">Face Shape Calibration</a></li>
+            <li><button type="button" class="footer-link" data-action="open-rx">Prescription (Rx) Calculator</button></li>
+            <li><button type="button" class="footer-link" data-action="open-compare">Side-by-Side Frame Compare</button></li>
+            <li><button type="button" class="footer-link" data-action="open-favs">Saved Wishlist</button></li>
+            <li><button type="button" class="footer-link" data-action="open-order">Optical Shopping Bag</button></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Guides &amp; Support</h3>
+          <ul class="footer-links">
+            <li><button type="button" class="footer-link" data-action="open-guide" data-val="index">Refractive Lens Index Guide</button></li>
+            <li><button type="button" class="footer-link" data-action="open-guide" data-val="sizing">Frame Sizing &amp; PD Guide</button></li>
+            <li><button type="button" class="footer-link" data-action="open-guide" data-val="faces">Facial Contour Matching</button></li>
+            <li><button type="button" class="footer-link" data-action="open-search">Quick Catalogue Search (/)</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 AURELIA Eyewear Atelier. Demonstration Optical Selector — verify all prescriptions with a licensed optometrist.
+        </div>
+        <div class="footer-socials">
+          <a href="#top" class="social-icon-btn" aria-label="Back to top" title="Back to top">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Dialog Modal for Frame Try-On, Prescription, Compare, Wishlist & Bag -->
+  <dialog id="dlg" aria-labelledby="dlg-title">
+    <div class="dlg-in">
+      <div class="dlg-head">
+        <h2 id="dlg-title"></h2>
+        <button class="icon-btn" data-action="close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="dlg-body"></div>
+    </div>
+  </dialog>
+
+  <!-- Verdant-Style Bottom-Right Toast Notification Container -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
